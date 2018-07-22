@@ -4,6 +4,7 @@ DOCS_DIR	=	docs
 
 DOC_BUILD	=	$(DOCS_DIR)/_build
 
+CMD_ISORT	:=	isort
 CMD_PYTHON	:=	python3
 CMD_SPHINX	:=	sphinx-build
 
@@ -19,6 +20,7 @@ help:
 	@echo "cleandoc"	"\t"	"clean sphinx documentation files"
 	@echo "docs"		"\t\t"	"buld documentation with sphinx"
 	@echo "docw"		"\t\t"	"browse generated documentation"
+	@echo "sort"		"\t\t"	"sort imports with isort"
 
 
 define _browser_run
@@ -35,6 +37,16 @@ define _sphinx_run
 endef
 
 
+define _isort_run
+	@$(CMD_ISORT) \
+		--combine-star \
+		--force-sort-within-sections \
+		--multi-line 5 \
+		--apply \
+		--recursive \
+		"$(1)"
+endef
+
 clean: cleandoc
 
 cleandoc:
@@ -47,3 +59,8 @@ docs:
 
 docsw: docs
 	$(call _browser_run,$(DOC_BUILD)/html,index.html)
+
+
+
+sort:
+	$(call _isort_run,$(MAIN_DIR))
