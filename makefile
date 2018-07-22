@@ -7,6 +7,7 @@ HCOV_DIR	=	htmlcov
 DOC_BUILD	=	$(DOCS_DIR)/_build
 
 CMD_DELETE	:=	rm -vf
+CMD_FIND	:=	find
 CMD_ISORT	:=	isort
 CMD_PYLINT	:=	pylint
 CMD_PYREV	:=	pyreverse
@@ -17,7 +18,7 @@ CMD_SPHINX	:=	sphinx-build
 PLOTS		:=	$(patsubst %,%_$(LIB_NAME).png,classes packages)
 
 .PHONY: help
-.PHONY: clean cleancov cleandoc cleanplot cleantest
+.PHONY: clean cleancov cleandoc cleanplot cleanpyc cleantest
 .PHONY: docs docsw
 .PHONY: lint lintt plot sort sortt
 .PHONY: test testc testcov testhcov testhcovw
@@ -30,6 +31,7 @@ help:
 	@echo "cleancov"	"\t"	"clean test coverage files"
 	@echo "cleandoc"	"\t"	"clean sphinx documentation files"
 	@echo "cleanplot"	"\t"	"clean generated graphics"
+	@echo "cleanpyc"	"\t"	"clean .pyc and __pycache__ files"
 	@echo "cleantest"	"\t"	"clean test cache files"
 	@echo "docs"		"\t\t"	"buld documentation with sphinx"
 	@echo "docw"		"\t\t"	"browse generated documentation"
@@ -42,6 +44,7 @@ help:
 	@echo "testcov"		"\t"	"run test coverage with pytest"
 	@echo "testhcov"	"\t"	"run test coverage html with pytest"
 	@echo "testhcovw"	"\t"	"browse test coverage html"
+	@echo
 
 
 define _browser_run
@@ -102,7 +105,7 @@ define _pytest_run_cov
 endef
 
 
-clean: cleancov cleandoc cleanplot cleantest
+clean: cleancov cleandoc cleanplot cleanpyc cleantest
 
 cleancov:
 	@$(CMD_DELETE) -r $(HCOV_DIR)
@@ -113,6 +116,12 @@ cleandoc:
 
 cleanplot:
 	@$(CMD_DELETE) $(PLOTS)
+
+cleanpyc:
+	@$(CMD_FIND) "$(MAIN_DIR)" "$(TEST_DIR)" \
+		-name '*.pyc' -delete -print \
+			-o \
+		-name '__pycache__' -delete -print \
 
 cleantest:
 	@$(CMD_DELETE) -r .pytest_cache
