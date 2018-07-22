@@ -1,3 +1,4 @@
 -r requirements.txt
 isort==4.3.4
+pylint==1.9.2
 Sphinx==1.7.5
