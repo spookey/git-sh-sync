@@ -44,6 +44,7 @@ help:
 	@echo "testcov"		"\t"	"run test coverage with pytest"
 	@echo "testhcov"	"\t"	"run test coverage html with pytest"
 	@echo "testhcovw"	"\t"	"browse test coverage html"
+	@echo "travis"		"\t\t"	"run travis-ci command"
 	@echo
 
 
@@ -167,3 +168,7 @@ testhcov:
 
 testhcovw: $(HCOV_DIR)
 	$(call _browser_run,$(HCOV_DIR),index.html)
+
+
+
+travis: test lint
