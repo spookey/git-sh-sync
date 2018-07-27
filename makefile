@@ -67,13 +67,18 @@ define _pylint_msg_tpl
 endef
 export _pylint_msg_tpl
 
-define _pylint_run
+define _pylint
 	@$(CMD_PYLINT) \
-		--disable "C0111" \
-		--disable "RP0401" \
 		--msg-template="$$_pylint_msg_tpl" \
 		--output-format="colorized" \
-		"$(1)"
+			$(1)
+endef
+
+define _pylint_run
+	$(call _pylint,"$(MAIN_DIR)")
+endef
+define _pylint_run_test
+	$(call _pylint,--disable "C0111" "$(TEST_DIR)")
 endef
 
 define _pyreverse_run
@@ -93,7 +98,7 @@ define _isort_run
 		--multi-line 5 \
 		--apply \
 		--recursive \
-		"$(1)"
+			"$(1)"
 endef
 
 define _pytest_run
@@ -138,9 +143,9 @@ docsw: docs
 
 
 lint:
-	$(call _pylint_run,$(MAIN_DIR))
+	$(call _pylint_run)
 lintt:
-	$(call _pylint_run,$(TEST_DIR))
+	$(call _pylint_run_test)
 
 
 $(PLOTS): plot
