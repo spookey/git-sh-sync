@@ -176,4 +176,5 @@ testhcovw: $(HCOV_DIR)
 
 
 
-travis: test lint
+travis: testcov
+	$(call _pylint_run) || true
