@@ -15,7 +15,7 @@ class Command:
             stdout='', stderr='', code=None, exc=None
         )
 
-        self._log.debug('command initialized: """%s"""', self)
+        self._log.debug('command initialized: """%s"""', str(self))
 
     @property
     def cmd(self):
@@ -96,8 +96,8 @@ class Command:
             self._data['stderr'] = stderr.strip()
 
         if self.success:
-            self._log.info('command success: """%s"""', self)
+            self._log.info('command success: """%s"""', str(self))
         else:
-            self._log.error('command failed: """%s"""', self)
+            self._log.error('command failed: """%s"""', str(self))
 
         return self.success
