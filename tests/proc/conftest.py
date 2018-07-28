@@ -16,11 +16,7 @@ def helpcmd():
             data[key] = val
         setattr(obj, '_data', data)
 
-    def fields(obj):
-        return getattr(obj, '_fields', None)
-
-    yield namedtuple('helpcmd', ('init', 'edit', 'fields'))(
+    yield namedtuple('helpcmd', ('init', 'edit'))(
         init=init,
         edit=edit,
-        fields=fields
     )

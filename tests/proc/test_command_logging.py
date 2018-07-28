@@ -1,4 +1,4 @@
-from logging import DEBUG, INFO, ERROR
+from logging import DEBUG, ERROR, INFO
 
 from git_sh_sync.proc import Command
 

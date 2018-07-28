@@ -69,8 +69,7 @@ def test_cmd_launched_e(helpcmd):
 
 def test_cmd_fields_pre(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
-    fields = helpcmd.fields(res)
-    assert fields == dict(
+    assert res.fields == dict(
         command='test-command', cwd='test-dir', cin='test-input'
     )
 
@@ -84,13 +83,11 @@ def test_cmd_repr_pre(helpcmd):
 
 def test_cmd_fields_post(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
-    fields = helpcmd.fields(res)
-    assert fields == dict(
+    assert res.fields == dict(
         command='test-command', cwd='test-dir', cin='test-input'
     )
     helpcmd.edit(res, code=0)
-    fields = helpcmd.fields(res)
-    assert fields == dict(
+    assert res.fields == dict(
         command='test-command', cwd='test-dir', cin='test-input',
         stdout='', stderr='', code=0, exc=None
     )

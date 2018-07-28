@@ -66,7 +66,7 @@ class Command:
         return self.stderr.splitlines()
 
     @property
-    def _fields(self):
+    def fields(self):
         res = dict(command=self.command, cwd=self.cwd, cin=self.cin)
         if self.launched:
             res.update(
@@ -76,7 +76,7 @@ class Command:
         return res
 
     def __repr__(self):
-        return pformat(self._fields)
+        return pformat(self.fields)
 
     def __call__(self):
         if self.launched:
