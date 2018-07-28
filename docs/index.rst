@@ -13,6 +13,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   proc
 
 
 Indices and tables
