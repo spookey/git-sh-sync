@@ -38,6 +38,7 @@ release = RELEASE
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
 ]
 
@@ -155,4 +156,19 @@ texinfo_documents = [
 ]
 
 
+# ----------------------------------------------------------------------------
 # -- Extension configuration -------------------------------------------------
+
+# -- Options for autodoc -----------------------------------------------------
+
+autodoc_member_order = 'bysource'
+
+autodoc_default_flags = ['members', 'private-members', 'undoc-members']
+
+# -- Options for Intersphinx -------------------------------------------------
+
+intersphinx_mapping = {
+    'python': (
+        'https://docs.python.org/3', ('_build/objects.inv', None)
+    ),
+}

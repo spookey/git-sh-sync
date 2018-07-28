@@ -6,13 +6,17 @@ Welcome to the documentation!
 
 .. include:: ../readme.rst
 
+
+Contents
+--------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
 
 
-.. rubric:: Indices and tables:
+Indices and tables
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

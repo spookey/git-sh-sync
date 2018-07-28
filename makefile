@@ -5,6 +5,8 @@ DOCS_DIR	=	docs
 HCOV_DIR	=	htmlcov
 
 DOC_BUILD	=	$(DOCS_DIR)/_build
+DOC_INV_LOC	=	$(DOC_BUILD)/objects.inv
+DOC_INV_URL	=	https://docs.python.org/3/objects.inv
 
 CMD_DELETE	:=	rm -vf
 CMD_FIND	:=	find
@@ -114,8 +116,8 @@ endef
 clean: cleancov cleandoc cleanplot cleanpyc cleantest
 
 cleancov:
-	@$(CMD_DELETE) -r $(HCOV_DIR)
-	@$(CMD_DELETE) .coverage
+	@$(CMD_DELETE) -r "$(HCOV_DIR)"
+	@$(CMD_DELETE) ".coverage"
 
 cleandoc:
 	$(call _sphinx_run,clean)
@@ -134,7 +136,10 @@ cleantest:
 
 
 
-docs:
+$(DOC_INV_LOC):
+	@curl -o "$(DOC_INV_LOC)" "$(DOC_INV_URL)"
+
+docs: $(DOC_INV_LOC)
 	$(call _sphinx_run,html)
 
 docsw: docs
