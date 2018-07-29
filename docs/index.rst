@@ -14,6 +14,7 @@ Contents
    :maxdepth: 2
 
    proc
+   util/disk
 
 
 Indices and tables
