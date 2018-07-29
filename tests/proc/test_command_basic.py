@@ -1,3 +1,4 @@
+from os import path
 from pprint import pformat
 
 
@@ -20,7 +21,7 @@ def test_cmd_init_empty(helpcmd):
 def test_cmd_init_more(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
     assert res.cmd == ['test-command']
-    assert res.cwd == 'test-dir'
+    assert res.cwd == path.realpath('test-dir')
     assert res.cin == 'test-input'
     assert res.exc is None
     assert res.code is None
@@ -70,36 +71,54 @@ def test_cmd_launched_e(helpcmd):
 def test_cmd_fields_pre(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
     assert res.fields == dict(
-        command='test-command', cwd='test-dir', cin='test-input'
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
     )
 
 
 def test_cmd_repr_pre(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
     assert str(res) == pformat(dict(
-        command='test-command', cwd='test-dir', cin='test-input'
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
     ))
 
 
 def test_cmd_fields_post(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
     assert res.fields == dict(
-        command='test-command', cwd='test-dir', cin='test-input'
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
     )
     helpcmd.edit(res, code=0)
     assert res.fields == dict(
-        command='test-command', cwd='test-dir', cin='test-input',
-        stdout='', stderr='', code=0, exc=None
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
+        stdout='',
+        stderr='',
+        code=0,
+        exc=None,
     )
 
 
 def test_cmd_repr_post(helpcmd):
     res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
     assert str(res) == pformat(dict(
-        command='test-command', cwd='test-dir', cin='test-input'
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
     ))
     helpcmd.edit(res, code=0)
     assert str(res) == pformat(dict(
-        command='test-command', cwd='test-dir', cin='test-input',
-        stdout='', stderr='', code=0, exc=None
+        command='test-command',
+        cwd=path.realpath('test-dir'),
+        cin='test-input',
+        stdout='',
+        stderr='',
+        code=0,
+        exc=None,
     ))

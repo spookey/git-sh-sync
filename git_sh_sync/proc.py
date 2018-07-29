@@ -8,6 +8,8 @@ from pprint import pformat
 from shlex import quote, split
 from subprocess import PIPE, Popen
 
+from git_sh_sync.util.disk import joined
+
 
 class Command:
     '''
@@ -25,6 +27,9 @@ class Command:
         '''
         if isinstance(cmd, str):
             cmd = split(cmd)
+
+        if cwd is not None:
+            cwd = joined(cwd)
 
         self._log = getLogger(self.__class__.__name__)
         self._data = dict(
