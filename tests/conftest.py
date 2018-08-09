@@ -4,12 +4,12 @@ from os import path
 from pytest import fixture
 
 
-@fixture
-def helpdir():
+@fixture(scope='session')
+def rootdir():
     root = path.abspath(path.dirname(path.dirname(__file__)))
 
     yield namedtuple(
-        'helpdir', ('root', 'join')
+        'RootDir', ('root', 'join')
     )(
         root=root,
         join=lambda *locs: path.abspath(path.join(root, *locs))

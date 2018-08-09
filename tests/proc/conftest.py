@@ -5,7 +5,7 @@ from pytest import fixture
 from git_sh_sync.proc import Command
 
 
-@fixture
+@fixture(scope='function')
 def helpcmd():
     def init(cmd, **kwargs):
         return Command(cmd, **kwargs)
@@ -16,7 +16,7 @@ def helpcmd():
             data[key] = val
         setattr(obj, '_data', data)
 
-    yield namedtuple('helpcmd', ('init', 'edit'))(
+    yield namedtuple('HelpCmd', ('init', 'edit'))(
         init=init,
         edit=edit,
     )

@@ -10,7 +10,7 @@ def test_ensured_folder(tmpdir):
     assert ensured(str(folder), folder=True) == folder
 
     assert folder.stat(raising=False) is not None
-    assert tmpdir.remove(folder) is None
+    assert folder.remove() is None
 
 
 def test_ensured_file(tmpdir):
@@ -23,7 +23,7 @@ def test_ensured_file(tmpdir):
 
     assert folder.stat(raising=False) is not None
     assert file.stat(raising=False) is None
-    assert tmpdir.remove(folder) is None
+    assert folder.remove() is None
 
 
 def test_ensured_logging(caplog, tmpdir):
@@ -33,7 +33,7 @@ def test_ensured_logging(caplog, tmpdir):
 
     assert ensured(str(file), folder=False) == file
 
-    assert tmpdir.remove(folder) is None
+    assert folder.remove() is None
 
     assert len(caplog.records) == 1
     rec = caplog.records[-1]

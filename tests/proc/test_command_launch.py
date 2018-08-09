@@ -18,12 +18,12 @@ def test_cmd_echo():
     assert res.launched is True
 
 
-def test_cmd_ls_cwd(helpdir):
+def test_cmd_ls_cwd(rootdir):
     files = ('makefile', 'readme.rst', 'requirements.txt')
-    res = Command('ls -1', cwd=helpdir.root)
+    res = Command('ls -1', cwd=rootdir.root)
     assert res() is True
     assert res.cmd == ['ls', '-1']
-    assert res.cwd == helpdir.root
+    assert res.cwd == rootdir.root
     assert res.code == 0
     assert res.success is True
     assert res.stderr == ''
