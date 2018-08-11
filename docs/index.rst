@@ -15,6 +15,7 @@ Contents
 
    proc
    util/disk
+   util/host
 
 
 Indices and tables
