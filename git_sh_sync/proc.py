@@ -10,6 +10,11 @@ from subprocess import PIPE, Popen
 
 from git_sh_sync.util.disk import joined
 
+CODE_SUCCESS = 0
+'''
+Returncode of a successful command
+'''
+
 
 class Command:
     '''
@@ -119,7 +124,7 @@ class Command:
         A command is considered successful if no :func:`exception <exc>`
         was thrown and the :func:`returncode <code>` equals 0
         '''
-        return self.exc is None and self.code == 0
+        return self.exc is None and self.code == CODE_SUCCESS
 
     @property
     def out(self):
