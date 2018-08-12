@@ -14,6 +14,7 @@ Contents
    :maxdepth: 2
 
    proc
+   repo
    util/disk
    util/host
 
