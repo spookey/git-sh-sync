@@ -18,8 +18,7 @@ Returncode of a successful command
 
 class Command:
     '''
-    This is a class-based command runner using
-    :py:mod:`subprocess`.
+    This is a class-based command runner using :py:mod:`subprocess`
     '''
 
     def __init__(self, cmd, *, cwd=None, cin=None):
@@ -104,7 +103,7 @@ class Command:
         '''
         :returns:
             Joined and :py:func:`quoted <shlex.quote>` output of internal
-            :meth:`cmd`
+            :attr:`cmd`
         '''
         return ' '.join(quote(cmd) for cmd in self.cmd)
 
@@ -112,6 +111,9 @@ class Command:
     def launched(self):
         '''
         :returns: ``True`` if command was launched, otherwise ``False``
+
+        A command is considered launched if any of the :attr:`exception <exc>`
+        or the :attr:`returncode <code>` are not set to ``None``
         '''
         return self.exc is not None or self.code is not None
 
@@ -121,15 +123,16 @@ class Command:
         :returns:
             ``True`` if command launch was successful, otherwise ``False``
 
-        A command is considered successful if no :func:`exception <exc>`
-        was thrown and the :func:`returncode <code>` equals 0
+        A command is considered successful if no :attr:`exception <exc>`
+        was thrown and the :attr:`returncode <code>`
+        equals :const:`CODE_SUCCESS`
         '''
         return self.exc is None and self.code == CODE_SUCCESS
 
     @property
     def out(self):
         '''
-        :returns: Splitted list output of :meth:`stdout`
+        :returns: Splitted list output of :attr:`stdout`
         :rtype: list
         '''
         return self.stdout.splitlines()
@@ -137,7 +140,7 @@ class Command:
     @property
     def err(self):
         '''
-        :returns: Splitted list output of :meth:`stderr`
+        :returns: Splitted list output of :attr:`stderr`
         :rtype: list
         '''
         return self.stderr.splitlines()
@@ -148,10 +151,10 @@ class Command:
         :returns: Some information about the current command as dictionary
         :rtype: dict
 
-        Before the command was :meth:`launched <launched>` only
-        :meth:`cmd`, :meth:`cwd` and :meth:`cin` are included.
-        After :meth:`launch <launched>` the result is extended by
-        :meth:`stdout`, :meth:`stderr`, :meth:`exc` and :meth:`code`.
+        Before the command was :attr:`launched` only
+        :attr:`cmd`, :attr:`cwd` and :attr:`cin` are included.
+        After :attr:`launch <launched>` the result is extended by
+        :attr:`stdout`, :attr:`stderr`, :attr:`exc` and :attr:`code`.
         '''
         res = dict(command=self.command, cwd=self.cwd, cin=self.cin)
         if self.launched:
@@ -172,9 +175,9 @@ class Command:
         '''
         Launches the command.
 
-        :returns: Output of :meth:`success`
+        :returns: Output of :attr:`success`
 
-        To avoid confusion a previously :meth:`launched <launched>` command
+        To avoid confusion a previously :attr:`launched` command
         will not run again, returning always ``False``.
         '''
         if self.launched:
