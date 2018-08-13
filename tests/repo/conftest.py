@@ -12,13 +12,15 @@ def initrepo(tmpdir, monkeypatch):
     repo = Repository
 
     def init(_, *, init):
-        repo.location = str(folder)
-        repo.remote_name = 'origin'
-        if init:
-            run(['git', 'init'], cwd=repo.location)
-        repo.folder = folder
+        setattr(repo, 'folder', folder)
 
-    monkeypatch.setattr(Repository, '__init__', init)
+        setattr(repo, 'location', str(folder))
+        setattr(repo, 'remote_name', 'origin')
+
+        if init:
+            run(['git', 'init'], cwd=str(folder))
+
+    monkeypatch.setattr(repo, '__init__', init)
 
     yield repo
 
@@ -42,7 +44,7 @@ def gitrepo(tmpdir):
             ['git', 'add', *files], cwd=repo.location
         ),
         commit=lambda msg: run(
-            ['git', 'commit', '-m', '"{}"'.format(msg)], cwd=repo.location
+            ['git', 'commit', '-m', '{}'.format(msg)], cwd=repo.location
         ),
         rm=lambda *files: run(
             ['git', 'rm', *files], cwd=repo.location
