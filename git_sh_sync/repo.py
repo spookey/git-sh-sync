@@ -9,6 +9,13 @@ from git_sh_sync.util.disk import ensured
 from git_sh_sync.util.host import get_hostname
 
 
+GIT_DIVIDER = '|-: ^_^ :-|'
+'''
+Format divider (e.g. used in log) - Should be different from any text
+inside a commit message
+'''
+
+
 class GitStatus(namedtuple('GitStatus', (
         'clean', 'conflicting', 'deleted', 'modified', 'untracked'
 ))):
@@ -27,6 +34,16 @@ class GitBranches(namedtuple('GitBranches', (
     '''
     :arg current: Currently active branch
     :arg all: All available branches (including *current*)
+    '''
+
+
+class GitLog(namedtuple('GitLog', (
+        'short', 'full', 'message'
+))):
+    '''
+    :arg short: Short commit hash
+    :arg full: Complete commit hash
+    :arg message: Commit message
     '''
 
 
@@ -166,3 +183,21 @@ class Repository:
         if cmd():
             return cmd.stdout
         return None
+
+    def log(self, num=-1):
+        '''
+        Retrieve log of repository
+
+        :param num: Limit length of output. Use negative for unlimited output.
+        :returns: Log entries containing short-, full-hash and commit message.
+        :rtype: list of :class:`GitLog`
+        '''
+        result = []
+        cmd = Command('git log --max-count {} --format="{}"'.format(
+            num, GIT_DIVIDER.join(['%h', '%H', '%B'])
+        ), cwd=self.location)
+        if cmd():
+            for elem in (el for el in cmd.out if el):
+                short, full, message = elem.split(GIT_DIVIDER)
+                result.append(GitLog(short=short, full=full, message=message))
+        return result
