@@ -201,3 +201,28 @@ class Repository:
                 short, full, message = elem.split(GIT_DIVIDER)
                 result.append(GitLog(short=short, full=full, message=message))
         return result
+
+    @property
+    def tags(self):
+        '''
+        Query existing tags.
+
+        :returns: Name of tags, newest first
+        :rtype: list
+        '''
+        cmd = Command(
+            'git tag --list --sort="-version:refname"',
+            cwd=self.location
+        )
+        cmd()
+        return cmd.out
+
+    def tag(self, name):
+        '''
+        Stick tags onto commits.
+
+        :param name: Tag name
+        :returns: ``True`` if successful else ``False``
+        '''
+        cmd = Command('git tag "{}"'.format(name), cwd=self.location)
+        return cmd()

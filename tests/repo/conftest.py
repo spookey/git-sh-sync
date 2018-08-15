@@ -34,7 +34,7 @@ def gitrepo(tmpdir):
 
     yield namedtuple('GitRepo', (
         'repo', 'folder', 'write',
-        'add', 'commit', 'rm', 'checkout_branch', 'checkout', 'merge'
+        'add', 'commit', 'rm', 'checkout_branch', 'checkout', 'merge', 'tag'
     ))(
         repo=repo, folder=folder,
         write=lambda name, text: folder.join(name).write_text(
@@ -57,6 +57,9 @@ def gitrepo(tmpdir):
         ),
         merge=lambda name: run(
             ['git', 'merge', name], cwd=repo.location
+        ),
+        tag=lambda name: run(
+            ['git', 'tag', name], cwd=repo.location
         ),
     )
 
