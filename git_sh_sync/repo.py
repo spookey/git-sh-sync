@@ -234,13 +234,17 @@ class Repository:
                         If left blank, *master_branch* is assumed
         :returns: ``True`` if successful else ``False``
 
-        If *treeis* is neither a known commit, tag or branch, a new branch
+        If *treeish* is neither a known commit, tag or branch, a new branch
         is created.
         '''
         if treeish is None:
             treeish = self.master_branch
 
         def is_known():
+            '''
+            Helper to optimize detection if *treeish* is a known
+            tag, branch or commit.
+            '''
             if treeish in self.tags:
                 return True
 
