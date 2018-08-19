@@ -8,7 +8,6 @@ from git_sh_sync.proc import Command
 from git_sh_sync.util.disk import ensured
 from git_sh_sync.util.host import get_hostname
 
-
 GIT_DIVIDER = '|-: ^_^ :-|'
 '''
 Format divider (e.g. used in log) - Should be different from any text
@@ -73,7 +72,8 @@ class Repository:
         self.master_branch = master_branch.strip()
         self.remote_name = remote_name.strip()
 
-        self.initialize(remote_url)
+        if self.initialize(remote_url):
+            self.checkout()
 
     @property
     def is_repo(self):
@@ -225,4 +225,41 @@ class Repository:
         :returns: ``True`` if successful else ``False``
         '''
         cmd = Command('git tag "{}"'.format(name), cwd=self.location)
+        return cmd()
+
+    def checkout(self, treeish=None):
+        '''
+        Checkout a commit, tag or branch.
+
+        :param treeish: Commit (short or full), tag or branch.
+                        If left blank, *master_branch* is assumed
+        :returns: ``True`` if successful else ``False``
+
+        If *treeis* is neither a known commit, tag or branch, a new branch
+        is created.
+        '''
+        if treeish is None:
+            treeish = self.master_branch
+
+        def is_known():
+            if treeish in self.tags:
+                return True
+
+            branches = self.branches()
+            for branch in branches.all:
+                if treeish in branch:
+                    return True
+
+            for log in self.log():
+                if treeish in log.short:
+                    return True
+                if treeish in log.full:
+                    return True
+            return False
+
+        line = (
+            'git checkout "{}"' if is_known() else 'git checkout -b "{}"'
+        ).format(treeish)
+
+        cmd = Command(line, cwd=self.location)
         return cmd()
