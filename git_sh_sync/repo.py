@@ -6,7 +6,6 @@ from logging import getLogger
 
 from git_sh_sync.proc import Command
 from git_sh_sync.util.disk import ensured
-from git_sh_sync.util.host import get_hostname
 
 GIT_DIVIDER = '|-: ^_^ :-|'
 '''

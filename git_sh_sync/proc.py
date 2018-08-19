@@ -177,6 +177,9 @@ class Command:
 
     @property
     def repr(self):
+        '''
+        Expand :meth:`__repr__` with triple-quotes and :const:`CHAR_NEWLINE`.
+        '''
         return CHAR_NEWLINE.join(['"""', str(self), '"""'])
 
     def __call__(self):
