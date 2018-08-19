@@ -1,6 +1,8 @@
 from os import path
 from pprint import pformat
 
+from git_sh_sync.proc import CHAR_NEWLINE
+
 
 def test_cmd_init_empty(helpcmd):
     res = helpcmd.init('test-command')
@@ -122,3 +124,10 @@ def test_cmd_repr_post(helpcmd):
         code=0,
         exc=None,
     ))
+
+
+def test_cmd_repr_repr(helpcmd):
+    res = helpcmd.init('test-command', cwd='test-dir', cin='test-input')
+    assert res.repr == '"""{}{}{}"""'.format(
+        CHAR_NEWLINE, str(res), CHAR_NEWLINE
+    )

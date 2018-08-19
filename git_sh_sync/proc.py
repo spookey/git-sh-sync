@@ -14,6 +14,10 @@ CODE_SUCCESS = 0
 '''
 Returncode of a successful command
 '''
+CHAR_NEWLINE = '\n'
+'''
+Newline character used for detailed log output
+'''
 
 
 class Command:
@@ -41,7 +45,7 @@ class Command:
             stdout='', stderr='', code=None, exc=None
         )
 
-        self._log.debug('command initialized: """%s"""', str(self))
+        self._log.debug('command initialized: %s', self.repr)
 
     @property
     def cmd(self):
@@ -171,6 +175,10 @@ class Command:
         '''
         return pformat(self.fields)
 
+    @property
+    def repr(self):
+        return CHAR_NEWLINE.join(['"""', str(self), '"""'])
+
     def __call__(self):
         '''
         Launches the command.
@@ -196,9 +204,10 @@ class Command:
             self._data['stdout'] = stdout.strip()
             self._data['stderr'] = stderr.strip()
 
-        if self.success:
-            self._log.info('command success: """%s"""', str(self))
+        success = self.success
+        if success:
+            self._log.info('command success: %s', self.repr)
         else:
-            self._log.error('command failed: """%s"""', str(self))
+            self._log.error('command failed: %s', self.repr)
 
-        return self.success
+        return success

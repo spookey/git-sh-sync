@@ -10,7 +10,7 @@ def test_cmd_log_init(caplog):
 
     rec = caplog.records[-1]
     assert rec.levelno == DEBUG
-    assert 'command initialized: """%s"""' in rec.msg
+    assert 'command initialized:' in rec.msg
     assert 'echo' in rec.args[-1]
 
 
@@ -23,7 +23,7 @@ def test_cmd_log_success(caplog):
 
     rec = caplog.records[-1]
     assert rec.levelno == INFO
-    assert 'command success: """%s"""' in rec.msg
+    assert 'command success:' in rec.msg
     assert 'echo' in rec.args[-1]
 
 
@@ -36,5 +36,5 @@ def test_cmd_log_failed(caplog):
 
     rec = caplog.records[-1]
     assert rec.levelno == ERROR
-    assert 'command failed: """%s"""' in rec.msg
+    assert 'command failed:' in rec.msg
     assert 'this-is-not-a-command' in rec.args[-1]
