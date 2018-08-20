@@ -266,3 +266,42 @@ class Repository:
 
         cmd = Command(line, cwd=self.location)
         return cmd()
+
+    def mutate(self):
+        '''
+        Collects all changes and tries to add/remove them.
+
+        :returns: ``True`` if everything went well, else ``False``
+
+        Will freak out if there are conflicts detected
+        - thus returning ``False`` and writing issues into the log.
+        '''
+        status = self.status
+
+        if status.clean:
+            return True
+
+        results = []
+
+        def add(elem):
+            cmd = Command('git add {}'.format(elem), cwd=self.location)
+            return cmd()
+
+        def remove(elem):
+            cmd = Command('git rm {}'.format(elem), cwd=self.location)
+            return cmd()
+
+        for elem in status.untracked:
+            results.append(add(elem))
+        for elem in status.modified:
+            results.append(add(elem))
+        for elem in status.deleted:
+            results.append(remove(elem))
+        for elem in status.conflicting:
+            self._log.error(
+                'conflicting file "%s" discovered in "%s"',
+                elem, self.location
+            )
+            results.append(False)
+
+        return all(results)
