@@ -284,10 +284,12 @@ class Repository:
         results = []
 
         def add(elem):
+            '''Helper to run git add onto one element'''
             cmd = Command('git add {}'.format(elem), cwd=self.location)
             return cmd()
 
         def remove(elem):
+            '''Helper to run git rm onto one element'''
             cmd = Command('git rm {}'.format(elem), cwd=self.location)
             return cmd()
 
