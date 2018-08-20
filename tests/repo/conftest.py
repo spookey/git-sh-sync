@@ -1,4 +1,5 @@
 from collections import namedtuple
+from logging import getLogger
 from subprocess import run
 
 from pytest import fixture
@@ -16,6 +17,7 @@ def initrepo(tmpdir, monkeypatch):
 
         setattr(repo, 'location', str(folder))
         setattr(repo, 'remote_name', 'origin')
+        setattr(repo, '_log', getLogger(repo.__class__.__name__))
 
         if init:
             run(['git', 'init'], cwd=str(folder))
@@ -33,13 +35,14 @@ def gitrepo(tmpdir):
     repo = Repository(location=str(folder))
 
     yield namedtuple('GitRepo', (
-        'repo', 'folder', 'write',
+        'repo', 'folder', 'write', 'remove',
         'add', 'commit', 'rm', 'checkout_branch', 'checkout', 'merge', 'tag'
     ))(
         repo=repo, folder=folder,
         write=lambda name, text: folder.join(name).write_text(
             text, 'utf-8', ensure=True
         ),
+        remove=lambda name: folder.join(name).remove(),
         add=lambda *files: run(
             ['git', 'add', *files], cwd=repo.location
         ),
