@@ -67,3 +67,35 @@ def gitrepo(tmpdir):
     )
 
     assert folder.remove() is None
+
+
+@fixture(scope='function')
+def conflict():
+    def make(gtrp, filename='file', brc_org='master', brc_sec='temp'):
+        assert gtrp.repo.status.clean is True
+        gtrp.checkout_branch(brc_org)
+
+        gtrp.write(filename, 'content 1')
+        gtrp.add(filename)
+        gtrp.commit('commit 1')
+
+        assert gtrp.repo.status.clean is True
+        gtrp.checkout_branch(brc_sec)
+
+        gtrp.write(filename, 'content 2')
+        gtrp.add(filename)
+        gtrp.commit('commit 2')
+
+        assert gtrp.repo.status.clean is True
+        gtrp.checkout(brc_org)
+
+        gtrp.write(filename, 'content 3')
+        gtrp.add(filename)
+        gtrp.commit('commit 3')
+
+        assert gtrp.repo.status.clean is True
+        gtrp.merge(brc_sec)
+
+        assert gtrp.repo.status.clean is False
+
+    yield make
