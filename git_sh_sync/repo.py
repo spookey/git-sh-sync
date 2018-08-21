@@ -119,10 +119,10 @@ class Repository:
         cmd = Command('git status --porcelain', cwd=self.location)
         if cmd():
             for elem in cmd.out:
-                sym, obj = elem[:2].strip(), elem[3:].strip()
+                sym, _, tail = elem.partition(' ')
                 for key, state in symbols.items():
                     if state in sym:
-                        res[key].append(obj)
+                        res[key].append(tail.strip())
 
         return GitStatus(**res, clean=not any(res.values()))
 
@@ -285,12 +285,12 @@ class Repository:
 
         def add(elem):
             '''Helper to run git add onto one element'''
-            cmd = Command('git add {}'.format(elem), cwd=self.location)
+            cmd = Command('git add "{}"'.format(elem), cwd=self.location)
             return cmd()
 
         def remove(elem):
             '''Helper to run git rm onto one element'''
-            cmd = Command('git rm {}'.format(elem), cwd=self.location)
+            cmd = Command('git rm "{}"'.format(elem), cwd=self.location)
             return cmd()
 
         for elem in status.untracked:
