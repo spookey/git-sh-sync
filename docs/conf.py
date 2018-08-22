@@ -2,6 +2,11 @@
 #
 # Configuration file for the Sphinx documentation builder.
 
+# pylint: disable=wrong-import-position
+# pylint: disable=import-error
+# pylint: disable=invalid-name
+# pylint: disable=redefined-builtin
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -12,18 +17,21 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-from info import AUTHOR, COPYRIGHT, DESCRIPTION, PROJECT, RELEASE, VERSION
+from info import Info  # noqa: E402
+
+INFO = Info()
+
 
 # -- Project information -----------------------------------------------------
 
-project = PROJECT
-copyright = COPYRIGHT
-author = AUTHOR
+project = INFO.project
+copyright = INFO.copyright
+author = INFO.author
 
 # The short X.Y version
-version = VERSION
+version = INFO.version
 # The full version, including alpha/beta/rc tags
-release = RELEASE
+release = INFO.release
 
 
 # -- General configuration ---------------------------------------------------
@@ -105,7 +113,7 @@ html_logo = '_static/icon.png'
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = '{}-doc'.format(PROJECT)
+htmlhelp_basename = '{}-doc'.format(INFO.project)
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -127,20 +135,22 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, '{}.tex'.format(PROJECT), '{} Documentation'.format(PROJECT),
-     author, 'manual'),
-]
+latex_documents = [(
+    master_doc, '{}.tex'.format(INFO.project),
+    '{} Documentation'.format(INFO.project),
+    author, 'manual'
+)]
 
 
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, PROJECT, '{} Documentation'.format(PROJECT),
-     [author], 1)
-]
+man_pages = [(
+    master_doc, INFO.project,
+    '{} Documentation'.format(INFO.project),
+    [author], 1
+)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -148,11 +158,12 @@ man_pages = [
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, PROJECT, '{} Documentation'.format(PROJECT),
-     author, PROJECT, DESCRIPTION,
-     'Miscellaneous'),
-]
+texinfo_documents = [(
+    master_doc, INFO.project,
+    '{} Documentation'.format(INFO.project),
+    author, INFO.project, INFO.description,
+    'Miscellaneous'
+)]
 
 
 # ----------------------------------------------------------------------------
