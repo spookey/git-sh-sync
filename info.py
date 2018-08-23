@@ -18,7 +18,7 @@ class Info:
 
     project = 'git-sh-sync'
     description = '''
-        python library to sync git repositories via shell
+        Python library to automatically synchronize git repositories via shell
     '''.strip()
 
     _contrib = [
@@ -26,10 +26,13 @@ class Info:
     ]
 
     @property
-    def author(self):
+    def author_name(self):
         return self._contrib[-1][0]
 
     @property
     def copyright(self):
         now = datetime.utcnow()
-        return '{}, {}'.format(now.year, self.author)
+        return '{}, {}'.format(now.year, self.author_name)
+
+
+INFO = Info()

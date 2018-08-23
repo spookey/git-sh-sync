@@ -19,7 +19,7 @@ def test_cmd_echo():
 
 
 def test_cmd_ls_cwd(rootdir):
-    files = ('makefile', 'readme.rst', 'requirements.txt')
+    files = ('makefile', 'README.rst', 'requirements.txt')
     res = Command('ls -1', cwd=rootdir.root)
     assert res() is True
     assert res.cmd == ['ls', '-1']

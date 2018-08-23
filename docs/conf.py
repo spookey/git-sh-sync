@@ -17,16 +17,14 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-from info import Info  # noqa: E402
-
-INFO = Info()
+from info import INFO  # noqa: E402
 
 
 # -- Project information -----------------------------------------------------
 
 project = INFO.project
 copyright = INFO.copyright
-author = INFO.author
+author = INFO.author_name
 
 # The short X.Y version
 version = INFO.version
@@ -76,6 +74,18 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
+
+rst_epilog = '''
+.. |description| replace:: {description}
+.. |project| replace:: {project}
+.. |release| replace:: {release}
+.. |version| replace:: {version}
+'''.format(
+    description=INFO.description,
+    project=INFO.project,
+    release=INFO.release,
+    version=INFO.version,
+)
 
 # -- Options for HTML output -------------------------------------------------
 

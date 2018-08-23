@@ -1,10 +1,15 @@
-=========================
-git-sh-sync documentation
-=========================
+=======================
+|project| documentation
+=======================
+
+|description|
+
+:Version: |version|
+:Release: |release|
 
 Welcome to the documentation!
 
-.. include:: ../readme.rst
+.. include:: ../README.rst
 
 
 Contents
