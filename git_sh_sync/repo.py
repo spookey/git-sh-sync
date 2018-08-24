@@ -6,6 +6,7 @@ from logging import getLogger
 
 from git_sh_sync.proc import Command
 from git_sh_sync.util.disk import ensured
+from git_sh_sync.util.host import get_hostname
 
 GIT_DIVIDER = '|-: ^_^ :-|'
 '''
@@ -307,3 +308,45 @@ class Repository:
             results.append(False)
 
         return all(results)
+
+    def scrub(self, branch_name=None):
+        '''
+        Uses :meth:`mutate` to handle all changes and commits them into
+        a temporary branch. Will merge the branches back into the original
+        branch afterwards.
+
+        :param branch_name: Name of the temporary branch.
+                            Will use the :func:`current hostname
+                            <git_sh_sync.util.host.get_hostname>`
+                            if left blank.
+        :returns: ``True`` if everything went well (or there is nothing to do),
+                  ``False`` otherwise
+        '''
+        if self.status.clean:
+            return True
+
+        branches = self.branches()
+        hostname = get_hostname(short=True)
+        if branch_name is None:
+            branch_name = hostname
+
+        self.checkout(branch_name)
+
+        if not self.mutate():
+            self._log.warning(
+                'problems discovered, will not continue to clean "%s"',
+                self.location
+            )
+            return False
+
+        cmd = Command('git commit --message="{} auto commit"'.format(
+            hostname
+        ), cwd=self.location)
+        cmd()
+
+        self.checkout(branches.current)
+
+        cmd = Command('git merge "{}" --message="{} auto merge"'.format(
+            branch_name, hostname
+        ), cwd=self.location)
+        return cmd()
