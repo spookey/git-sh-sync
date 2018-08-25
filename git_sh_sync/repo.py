@@ -350,3 +350,33 @@ class Repository:
             branch_name, hostname
         ), cwd=self.location)
         return cmd()
+
+    def cleanup(self, branch_name=None, remote_name=None):
+        '''
+        Uses :meth:`scrub` to form a new commit and pulls afterwards.
+
+        :param branch_name: Name of the temporary branch (see :meth:`scrub`)
+        :param remote_name: Name of the remote to pull from. For best results
+                            this should be some part of :meth:`remote_names`.
+                            If left blank, class wide *remote_name* is taken.
+
+        :returns: ``True`` on success, ``False`` otherwise
+        '''
+        if not self.scrub(branch_name=branch_name):
+            return False
+
+        if remote_name is None:
+            remote_name = self.remote_name
+
+        cmd = Command('git pull --tags "{}"'.format(
+            remote_name
+        ), cwd=self.location)
+        if not cmd():
+            if 'conflict' in cmd.stdout.lower():
+                self._log.error(
+                    'conflict detected while pulling from "%s" into "%s"',
+                    remote_name, self.location
+                )
+            return False
+
+        return True
