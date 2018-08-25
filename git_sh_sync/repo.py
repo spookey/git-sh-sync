@@ -380,3 +380,38 @@ class Repository:
             return False
 
         return True
+
+    def __call__(
+            self,
+            temp_branch_name=None, push_branch_name=None, remote_name=None
+    ):
+        '''
+        Does a :meth:`cleanup <cleanup>` and tries to push afterwards.
+        Will not push if something goes wrong with
+        the :meth:`cleanup <cleanup>`.
+
+        :param temp_branch_name: Name of the temporary branch
+                                 (see :meth:`scrub`)
+        :param push_branch_name: Name of the branch to push into.
+                                 Will be set to class wide *master_branch* if
+                                 set to ``None``
+        :param remote_name: Name of the remote to pull from
+                            (see :meth:`cleanup`)
+
+        :returns: ``True`` if everything went well, ``False`` otherwise
+        '''
+        if push_branch_name is None:
+            push_branch_name = self.master_branch
+        if remote_name is None:
+            remote_name = self.remote_name
+
+        if not self.cleanup(
+                branch_name=temp_branch_name,
+                remote_name=remote_name
+        ):
+            return False
+
+        cmd = Command('git push -u "{}" "{}"'.format(
+            remote_name, push_branch_name
+        ), cwd=self.location)
+        return cmd()
