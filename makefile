@@ -24,6 +24,8 @@ PLOTS		:=	$(patsubst %,%_$(LIB_NAME).png,classes packages)
 .PHONY: docs docsw
 .PHONY: lint lintt plot sort sortt
 .PHONY: test testc testcov testhcov testhcovw
+.PHONY: travis
+
 
 help:
 	@echo "$(LIB_NAME) makefile"
